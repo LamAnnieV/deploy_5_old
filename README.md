@@ -19,13 +19,15 @@ Previously, we manually built the infrastructure that built, tested, and deploye
 GitHub serves as the repository from which Jenkins retrieves files to build, test, and deploy the URL Shortener application.  For this deployment, we need to make edits to the Jenkinsfilev1 "Deploy" block to:  secure copy the file "setup.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup.sh" script.  Also, update the setup.sh file to clone the repository from https://github.com/LamAnnieV/deploy_5.git and cd to the correct directory where the local repository is located.  
 After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" block to:  secure copy the file "setup2.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup2.sh" script.  Also, update the setup2.sh file to: clone the repository from https://github.com/LamAnnieV/deploy_5.git, delete the correct previous repository,  cd to correct directory that contains your newly cloned local repository
 
-'stage ('Deploy') {
+**Edit to the Jenkinsfilev1**
+
+`stage ('Deploy') {
 steps {
 sh '''#!/bin/bash
 ip_file=/var/lib/jenkins/ip_address.txt
 ip_address=$(cat "$ip_file")
 scp setup.sh ubuntu@"$ip_address":/home/ubuntu/
-ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup.sh'
+ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup.sh`
 ''''
 
 
