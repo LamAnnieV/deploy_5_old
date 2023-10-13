@@ -4,7 +4,7 @@ pipeline {
     stage ('Clean') {
       steps {
         sh '''#!/bin/bash
-        ip_file=/var/lib/jenkins/workspace/ip_address.txt
+        ip_file=/var/lib/jenkins/ip_address.txt
         ip_address=$(cat "$ip_file")
         ssh ubuntu@"$ip_address" "cd /home/ubuntu/deploy_5 && sudo chmod 777 pkill.sh && ./pkill.sh"
         '''
@@ -13,7 +13,7 @@ pipeline {
    stage ('Deploy') {
     steps {
      sh '''#!/bin/bash
-      ip_file=/var/lib/jenkins/workspace/ip_address.txt
+      ip_file=/var/lib/jenkins/ip_address.txt
       ip_address=$(cat "$ip_file")
       scp setup2.sh ubuntu@"$ip_address":/home/ubuntu/
       ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup2.sh'
