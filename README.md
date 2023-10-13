@@ -17,19 +17,26 @@ Previously, we manually built the infrastructure that built, tested, and deploye
 ## Step #2 GitHub/Git
 
 GitHub serves as the repository from which Jenkins retrieves files to build, test, and deploy the URL Shortener application.  For this deployment, we need to make edits to the Jenkinsfilev1 "Deploy" block to:  secure copy the file "setup.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup.sh" script.  Also, update the setup.sh file to clone the repository from https://github.com/LamAnnieV/deploy_5.git and cd to the correct directory where the local repository is located.  
-After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" block to:  secure copy the file "setup2.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup2.sh" script.  Also, update the setup2.sh file to: clone the repository from https://github.com/LamAnnieV/deploy_5.git, delete the correct previous repository,  cd to correct directory that contains your newly cloned local repository
+After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" block to:  secure copy the file "setup2.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup2.sh" script.  Then, update the setup2.sh file to: clone the repository from https://github.com/LamAnnieV/deploy_5.git, delete the correct previous repository,  cd to correct directory that contains your newly cloned local repository.  Also, update a HTML file for testing purposes.
 
-**Edit to the Jenkinsfilev1**
+**Edit to the Jenkinsfilev1 and Jenkinsfilev2**
 
-```stage ('Deploy') {
-steps {
-sh '''#!/bin/bash
-ip_file=/var/lib/jenkins/ip_address.txt
-ip_address=$(cat "$ip_file")
-scp setup.sh ubuntu@"$ip_address":/home/ubuntu/
-ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup.sh
-'''' ```
+![File](Images/Jenkinsfilev1.png)
 
+**Edit to the setup.sh**
+
+![File](Images/setup_sh.png)
+
+**Edit to the setup2.sh**
+
+![File](Images/setup2_sh.png)
+
+**Edit to a HTML file**
+
+![File](Images/html_edit.png)
+
+
+In order for the EC2 instance, where Jenkins is installed, to access the repository, you need to generate a token from GitHub and then provide it to the EC2 instance.
 
 [Generate GitHub Token](https://github.com/LamAnnieV/GitHub/blob/main/Generate_GitHub_Token.md)
 
