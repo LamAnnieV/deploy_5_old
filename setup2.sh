@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -rf Deploy_5_main
+rm -rf deploy_5
 source test/bin/activate
 git clone https://github.com/LamAnnieV/deploy_5.git
 cd deploy_5
