@@ -27,8 +27,8 @@ sh '''#!/bin/bash
 ip_file=/var/lib/jenkins/ip_address.txt
 ip_address=$(cat "$ip_file")
 scp setup.sh ubuntu@"$ip_address":/home/ubuntu/
-ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup.sh`
-''''
+ssh ubuntu@"$ip_address" 'bash -s < /home/ubuntu/setup.sh
+''''`
 
 
 [Generate GitHub Token](https://github.com/LamAnnieV/GitHub/blob/main/Generate_GitHub_Token.md)
