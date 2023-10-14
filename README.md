@@ -126,6 +126,7 @@ ssh-keygen  #This will generate the public key to /var/lib/jenkins/.ssh/id_rsa.p
 #Then in the Jenkins server as a Jenkins user, run the command below to test the SSH connection
 ssh ubuntu@application_server_ip_address
 ```
+**SSH Connection was made:**
 
 ![image](Images/ssh.png)
 
@@ -135,13 +136,13 @@ To avoid exposing the IP address in GitHub and enable SSH automation, the IP add
 
 In both instances, as an ubuntu user, install the following:
 
-'''
+```
 sudo apt update
 sudo apt install -y software-properties-common 
 sudo add-apt-repository -y ppa:deadsnakes/ppa 
 sudo apt install -y python3.7 
 sudo apt install -y python3.7-venv
-'''
+```
 
 ## Step #6 Configure CloudWatch and Create Alarms to Monitor Resources
 
@@ -175,7 +176,7 @@ This image shows the CPU utilization of the Jenkins server under a stress test. 
 
 ![image](Images/Jenkins_CloudWatch.png)
 
-**"deploy_5" Build**
+**"deploy_5.1" Build**
 
 Jenkins build "deploy_5" was successful:
 
@@ -195,7 +196,7 @@ This image shows the CPU utilization of the Application server under a stress te
 
 **Issue(s)**
 
-There weren't a lot of issues, it is the processing of writing code, testing code, finding bugs and debugging code in the Terrafrom files and the edits made in the Jenkinfiles and the setup files.
+Most of the challenges revolved around the development process, including writing and testing code, identifying bugs, and debugging code within the Terraform files, as well as making necessary edits in the Jenkinsfiles and setup files
 
 ## Conclusion
 
