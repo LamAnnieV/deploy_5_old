@@ -74,7 +74,7 @@ Though the Jenkins Server initiates the deployment of the application, it does n
  
 **Command to establish SSH Connection as Jenkins user: **
 
-'''
+```
 #In the Jenkins Server run the following bash commands
 sudo passwd jenkins
 sudo su - jenkins -s /bin/bash
@@ -83,7 +83,7 @@ ssh-keygen  #This will generate the public key to /var/lib/jenkins/.ssh/id_rsa.p
 #Paste the key in /home/ubuntu/.ssh/authorized_keys file
 #Then in the Jenkins server as a Jenkins user, run the command below to test the SSH connection
 ssh ubuntu@application_server_ip_address
-'''
+```
 
 [image](Images/ssh.png)
 
