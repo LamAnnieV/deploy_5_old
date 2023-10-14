@@ -6,9 +6,9 @@ By:  Annie V Lam - Kura Labs
 
 # Purpose
 
-SSH to another different server to deploy the application 
+SSHing to a separate server for application deployment.
 
-Previously, we manually built the infrastructure that built, tested, and deployed our URL application in one server.  In this deployment, we used Terraform to create the infrustructure.  However, we are building and testing the application in one server.  Then, sshing into the second server to deploy the application. 
+Previously, we manually built, tested, and deployed our web application on a single server. In our updated deployment process, we utilize Terraform to create the infrastructure. However, we now build and test the application on one server before SSHing into a second server for the deployment process.
 
 ## Step #1 Diagram the VPC Infrastructure and the CI/CD Pipeline
 
@@ -16,8 +16,53 @@ Previously, we manually built the infrastructure that built, tested, and deploye
 
 ## Step #2 GitHub/Git
 
-GitHub serves as the repository from which Jenkins retrieves files to build, test, and deploy the URL Shortener application.  For this deployment, we need to make edits to the Jenkinsfilev1 "Deploy" block to:  secure copy the file "setup.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup.sh" script.  Also, update the setup.sh file to clone the repository from https://github.com/LamAnnieV/deploy_5.git and cd to the correct directory where the local repository is located.  
-After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" block to:  secure copy the file "setup2.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup2.sh" script.  Then, update the setup2.sh file to: clone the repository from https://github.com/LamAnnieV/deploy_5.git, delete the correct previous repository,  cd to correct directory that contains your newly cloned local repository.  Also, update a HTML file for testing purposes.
+**GitHub Repository and Jenkins Integration:**
+
+GitHub serves as the repository from which Jenkins retrieves files to build, test, and deploy the URL Shortener application.
+
+**Jenkinsfilev1 - Initial Deployment:**
+
+In this deployment, we need to make edits to the Jenkinsfilev1 "Deploy" block to achieve the following tasks:
+
+```
+Securely copy the file "setup.sh" from the Jenkins Server to the Application Server.
+SSH into the Application server.
+Run the "setup.sh" script in the Application server.
+```
+In the setup.sh file, make the following updates:
+
+```
+Clone the repository from https://github.com/LamAnnieV/deploy_5.git.
+Change the working directory to the correct location of the locally cloned repository.
+```
+
+**Jenkinsfilev2 - Subsequent Deployment:**
+
+After successfully deploying the application, edit the Jenkinsfilev2 "Clean" block to perform the following actions:
+
+```
+Securely copy the file "pkill.sh" from the Jenkins Server to the Application Server.
+SSH into the Application server.
+Run the "pkill.sh" script.
+```
+
+Edit the Jenkinsfilev2 "Deploy" block to perform the following actions:
+
+```
+Securely copy the file "setup.sh" from the Jenkins Server to the Application Server.
+SSH into the Application server.
+Run the "setup.sh" script in the Application server.
+```
+
+Update the "setup2.sh" file to:
+
+```
+Delete the previous repository, deploy_5
+Clone the repository from https://github.com/LamAnnieV/deploy_5.git.
+Update the working directory to deploy_5
+```
+
+For the purpose of testing the second build, make updates to an HTML file.
 
 **Edit to the Jenkinsfilev1**
 
@@ -39,7 +84,6 @@ After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" bl
 
 ![File](Images/html_edit.png)
 
-
 In order for the EC2 instance, where Jenkins is installed, to access the repository, you need to generate a token from GitHub and then provide it to the EC2 instance.
 
 [Generate GitHub Token](https://github.com/LamAnnieV/GitHub/blob/main/Generate_GitHub_Token.md)
@@ -58,8 +102,7 @@ For this application infrastructure, we want:
   -one with ports: 22 and 8000
   -another with ports: 22 and 8080
 ```
-
-To automate the building of the application infrastructure, use an instance that has vs code and terraform.  In the [terraform main.tf file](Images/main.tf), resources can be created by defining the resources you want terraform to create.  In addition, terraform allows the running of scripts for installs.  For one of the instance, a [script](Images/instance_1_installs.sh) was used for the installation of Jenkins.
+To automate the construction of the application infrastructure, employ an instance equipped with VS Code and Terraform. The [main.tf](Images/main.tf) and [variables.tf](Imaages/variables.tf) files, define the resources to be created and declare variables. Additionally, Terraform enables the execution of installation scripts. In the case of one instance, an installation script was utilized for [installing Jenkins](Images/instance_1_installs.sh).
 
 **Jenkins**
 
@@ -67,10 +110,9 @@ Jenkins is used to automate the Build, Test, and Deploy the Banking Application.
 
 
 
-## Step #4 Establish a SSH Connection from the Jenkins Server to the Application Server
+## Step #4 Establish an SSH Connection from the Jenkins Server to the Application Server
 
-Though the Jenkins Server initiates the deployment of the application, it does not deploy it.  It SSH to the application server and runs a script to deploy the application. 
- To do so, an SSH connection needs to be established as a Jenkins User.  
+While the Jenkins Server initiates the deployment process for the application, it does not perform the deployment itself. Instead, it establishes an SSH connection to the application server and runs a script to deploy the application. To accomplish this, an SSH connection is established using a Jenkins User account.
  
 **Command to establish SSH Connection as Jenkins user: **
 
@@ -87,6 +129,7 @@ ssh ubuntu@application_server_ip_address
 
 ![image](Images/ssh.png)
 
+To avoid exposing the IP address in GitHub and enable SSH automation, the IP address of the Application server is stored in a file within the Jenkins server, which can be conveniently referenced later.
 
 ## Step #5 Other Installation
 
@@ -94,18 +137,23 @@ In both instances, as an ubuntu user, install the following:
 
 '''
 sudo apt update
-
 sudo apt install -y software-properties-common 
-
 sudo add-apt-repository -y ppa:deadsnakes/ppa 
-
 sudo apt install -y python3.7 
-
 sudo apt install -y python3.7-venv
-
 '''
 
-## Step #6 Configure Jenkins Build and Run Build
+## Step #6 Configure CloudWatch and Create Alarms to Monitor Resources
+
+CloudWatch is used to monitor our resource usage in our instance.
+
+[Install/Configure CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance-fleet.html)
+
+Alarms allow you to set thresholds in CloudWatch, which will notify you when those thresholds are breached.
+
+[How to create a CloudWatch alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)
+
+## Step #7 Configure Jenkins Build and Run Build
 
 **"deploy_5" Build**
 
@@ -123,6 +171,10 @@ Jenkins build "deploy_5" was successful:
 
 ![image](Images/launch_application.png)
 
+This image shows the CPU utilization of the Jenkins server under a stress test. It is running 'sudo stress-ng --matrix 1 -t 1m' while concurrently executing a Jenkins build.
+
+![image](Images/Jenkins_CloudWatch.png)
+
 **"deploy_5" Build**
 
 Jenkins build "deploy_5" was successful:
@@ -137,16 +189,22 @@ Jenkins build "deploy_5.1" took multiple attempts before the build was successfu
 
 ![image](Images/launch_application_2.png)
 
+This image shows the CPU utilization of the Application server under a stress test. It is running 'sudo stress-ng --matrix 1 -t 1m' while concurrently executing a Jenkins build.
+
+![image](Images/Application_CloudWatch.png)
+
 **Issue(s)**
 
+There weren't a lot of issues, it is the processing of writing code, testing code, finding bugs and debugging code in the Terrafrom files and the edits made in the Jenkinfiles and the setup files.
 
 ## Conclusion
 
+Most of the challenges revolved around the development process, including writing and testing code, identifying bugs, and debugging code within the Terraform files, as well as making necessary edits in the Jenkinsfiles and setup files
 
   
 ## Area(s) for Optimization:
 
--  Automate the AWS Cloud Infrastructure using Terraform modules
+-  Enhance automation of the AWS Cloud Infrastructure by implementing Terraform modules.
 
 Note:  ChatGPT was used to enhance the quality and clarity of this documentation
   
