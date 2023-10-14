@@ -19,13 +19,17 @@ Previously, we manually built the infrastructure that built, tested, and deploye
 GitHub serves as the repository from which Jenkins retrieves files to build, test, and deploy the URL Shortener application.  For this deployment, we need to make edits to the Jenkinsfilev1 "Deploy" block to:  secure copy the file "setup.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup.sh" script.  Also, update the setup.sh file to clone the repository from https://github.com/LamAnnieV/deploy_5.git and cd to the correct directory where the local repository is located.  
 After successfully deploying the application, edit the Jenkinsfilev2 "Deploy" block to:  secure copy the file "setup2.sh" from the Jenkins Server to the Application Server, ssh to the Application server, and run the "setup2.sh" script.  Then, update the setup2.sh file to: clone the repository from https://github.com/LamAnnieV/deploy_5.git, delete the correct previous repository,  cd to correct directory that contains your newly cloned local repository.  Also, update a HTML file for testing purposes.
 
-**Edit to the Jenkinsfilev1 and Jenkinsfilev2**
+**Edit to the Jenkinsfilev1**
 
 ![File](Images/Jenkinsfilev1.png)
 
 **Edit to the setup.sh**
 
 ![File](Images/setup_sh.png)
+
+**Edit to the Jenkinsfilev2**
+
+![File](Images/Jenkinsfilev2.png)
 
 **Edit to the setup2.sh**
 
@@ -42,9 +46,7 @@ In order for the EC2 instance, where Jenkins is installed, to access the reposit
 
 ## Step #3 Automate the Building of the Application Infrastructure 
 
-Automate the building of the application infrastructure, use an instance that has vs code and terraform to edit the define the resources you want terraform to create in a [main.tf file](Images/main.tf).
-
-For this deployment, we want:  
+For this application infrastructure, we want:  
 
 ```
 1 VPC
@@ -57,50 +59,53 @@ For this deployment, we want:
   -another with ports: 22 and 8080
 ```
 
-
-
-
-**Shell Scripts for Python and other installs**
-
-Python is used in the application and the test stage
-
-[Install "python3.10-venv", "python3-pip" and "zip"](https://github.com/LamAnnieV/Instance_Installs/blob/main/02_other_installs.sh)
-
-**Shell Scripts to Install Nginx**
-
-Nginx is used as a web server for hosting the URL Shortener application
-
-[Install Nginx](https://github.com/LamAnnieV/Instance_Installs/blob/main/Install_Ngnix.sh)
-
-After Nginx was installed, edit the configuration file "/etc/nginx/sites-enabled/default" with the information below:
-
-![Nginx Config File](Images/update_nginx_defaultfile.png)
+To automate the building of the application infrastructure, use an instance that has vs code and terraform.  In the [terraform main.tf file](Images/main.tf), resources can be created by defining the resources you want terraform to create.  In addition, terraform allows the running of scripts for installs.  For one of the instance, a [script](Images/instance_1_installs.sh) was used for the installation of Jenkins.
 
 **Jenkins**
 
-Jenkins is used to automate the Build, Test, and Deploy the URL Shortener Application.  To use Jenkins in a new EC2, all the proper installs to use Jenkins and to read the programming language that the application is written in need to be installed. In this case, they are Jenkins, Java, and Jenkins additional plugin "Pipeline Keep Running Step".
+Jenkins is used to automate the Build, Test, and Deploy the Banking Application.  To use Jenkins in a new EC2, all the proper installs to use Jenkins and to read the programming language that the application is written in need to be installed. In this case, they are Jenkins, Java, and Jenkins additional plugin "Pipeline Keep Running Step", which is manually installed through the GUI interface.
 
-**Instructions for Jenkins Install and other Installs required for Jenkins**
 
-[Install Jenkins](https://github.com/LamAnnieV/Instance_Installs/blob/main/01_jenkins_installs.sh)
 
-[Install "Pipeline Keep Running Step" Plugin](https://github.com/LamAnnieV/Jenkins/blob/main/Install_Pipeline_Keep_Running_Step.md)
+## Step #4 Establish a SSH Connection from the Jenkins Server to the Application Server
 
-## Step #5 Configure CloudWatch and Create Alarms to Monitor Resources
+Though the Jenkins Server initiates the deployment of the application, it does not deploy it.  It SSH to the application server and runs a script to deploy the application. 
+ To do so, an SSH connection needs to be established as a Jenkins User.  
+ 
+**Command to establish SSH Connection as Jenkins user: **
 
-CloudWatch is used to monitor our resource usage in our instance.
+'''
+#In the Jenkins Server run the following bash commands
+sudo passwd jenkins
+sudo su - jenkins -s /bin/bash
+ssh-keygen  #This will generate the public key to /var/lib/jenkins/.ssh/id_rsa.pub
+#Copy the public key from the file id_rsa.pub
+#Paste the key in /home/ubuntu/.ssh/authorized_keys file
+#Then in the Jenkins server as a Jenkins user, run the command below to test the SSH connection
+ssh ubuntu@application_server_ip_address
+'''
 
-[Install/Configure CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance-fleet.html)
+[image](Images/ssh.png)
 
-Alarms allow you to set thresholds in CloudWatch, which will notify you when those thresholds are breached.
 
-[How to create a CloudWatch alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)
+## Step #5 Other Installation
 
-## Step #6 Configure GitHub Webhook
+In both instances, as an ubuntu user, install the following:
 
-When a commit is made in GitHub, the 'Run Build' process still needs to be manually initiated. To automate this workflow, we configured a GitHub Webhook. Now, whenever there is a commit in the GitHub Repository, the webhook automatically triggers Jenkins to push the files and initiate the Build process.
+'''
+sudo apt update
+sudo apt install -y software-properties-common 
+sudo add-apt-repository -y ppa:deadsnakes/ppa 
+sudo apt install -y python3.7 
+sudo apt install -y python3.7-venv
+'''
 
-[Configure GitHub Webhook](https://github.com/LamAnnieV/GitHub/blob/main/Configure_GitHub_Webhook.md)
+## Step #6 Configure Jenkins Build and Run Build
+
+[Create Jenkins Multibranch Pipeline Build](https://github.com/LamAnnieV/Jenkins/blob/main/Jenkins_Multibranch_Pipeline_Build.md)
+
+Jenkins Build:  In Jenkins create a build "Deployment_4" for the URL Shortener application from GitHub Repository https://github.com/LamAnnieV/deployment_4.git and run the build.  This build consists of four stages:  The Build, the Test, the Clean, and the Deploy stages.
+
 
 
 ## Step #7 Configure Jenkins Build and Run Build
