@@ -176,7 +176,7 @@ This image shows the CPU utilization of the Jenkins server under a stress test. 
 
 ![image](Images/Jenkins_CloudWatch.png)
 
-**"deploy_5.1" Build**
+**The Jenkinsfilev2 was ran as a different build under the name "deploy_5.1"**
 
 Jenkins build "deploy_5" was successful:
 
@@ -200,8 +200,9 @@ Most of the challenges revolved around the development process, including writin
 
 ## Conclusion
 
-Most of the challenges revolved around the development process, including writing and testing code, identifying bugs, and debugging code within the Terraform files, as well as making necessary edits in the Jenkinsfiles and setup files
+As observed in the CloudWatch images, even when both servers were subjected to 'sudo stress-ng --matrix 1 -t 1m' while simultaneously running Jenkins builds, the CPU usage exceeded 20%, although it remained below 30%. This performance level is adequate as long as the servers are not consistently stressed, do not require more than 2 CPUs, and do not experience a substantial surge in requests. Nonetheless, it's advisable to explore options for additional resources as a precaution.
 
+In this deployment, two instances are employed: one for the Jenkins server and the other for the Web application server. Both instances are placed in the public subnet, as they need to be accessible via the internet. The Jenkins server is accessible through port 8080 for utilizing the Jenkins GUI interface, while the application server is accessible by our banking customers through port 8000. Thus, both subnets must remain public for these connections to function as required.
   
 ## Area(s) for Optimization:
 
