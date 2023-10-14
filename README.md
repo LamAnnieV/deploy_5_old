@@ -45,14 +45,15 @@ In order for the EC2 instance, where Jenkins is installed, to access the reposit
 Automate the building of the application infrastructure, use an instance that has vs code and terraform to edit the define the resources you want terraform to create in a [main.tf file](Images/main.tf).
 
 For this deployment, we want:  
-1 VPC
+
+```1 VPC
 2 Availability Zones
 2 Public Subnets
 2 EC2 Instances
 1 Route Table
 2 Security Group 
   -one with ports: 22 and 8000
-  -another with ports: 22 and 8080
+  -another with ports: 22 and 8080```
 
 **Shell Scripts for Python and other installs**
 
