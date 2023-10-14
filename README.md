@@ -40,23 +40,19 @@ In order for the EC2 instance, where Jenkins is installed, to access the reposit
 
 [Generate GitHub Token](https://github.com/LamAnnieV/GitHub/blob/main/Generate_GitHub_Token.md)
 
-## Step #3 Setup VPC and EC2 Infrastructure 
+## Step #3 Automate the Building of the Application Infrastructure 
 
-**Instructions to Setup the infrastructure for two private subnets and two public subnets**
+Automate the building of the application infrastructure, use an instance that has vs code and terraform to edit the define the resources you want terraform to create in a [main.tf file](Images/main.tf).
 
-[Setup VPC](https://github.com/LamAnnieV/Setup_VPC/blob/main/1_Setup_VPC.md)
-
-[Setup Subnets](https://github.com/LamAnnieV/Setup_VPC/blob/main/2_Setup_Subnets.md)
-
-[Setup Route Tables](https://github.com/LamAnnieV/Setup_VPC/blob/main/3_Setup_Route_Tables.md)
-
-[Setup Internet Gateways](https://github.com/LamAnnieV/Setup_VPC/blob/main/4_Setup_Internet_Gateways.md)
-
-**Instructions to Setup a New EC2 Instance**
-
-[Create EC2 Instance](https://github.com/LamAnnieV/Create_EC2_Instance/blob/main/Create_EC2_Instance.md)
-
-## Step #4 Installs for EC2 
+For this deployment, we want:  
+1 VPC
+2 Availability Zones
+2 Public Subnets
+2 EC2 Instances
+1 Route Table
+2 Security Group 
+  -one with ports: 22 and 8000
+  -another with ports: 22 and 8080
 
 **Shell Scripts for Python and other installs**
 
