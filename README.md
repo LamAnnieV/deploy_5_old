@@ -55,6 +55,9 @@ For this deployment, we want:
   -one with ports: 22 and 8000
   -another with ports: 22 and 8080```
 
+
+
+
 **Shell Scripts for Python and other installs**
 
 Python is used in the application and the test stage
