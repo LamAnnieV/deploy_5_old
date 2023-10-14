@@ -85,7 +85,7 @@ ssh-keygen  #This will generate the public key to /var/lib/jenkins/.ssh/id_rsa.p
 ssh ubuntu@application_server_ip_address
 ```
 
-[image](Images/ssh.png)
+![image](Images/ssh.png)
 
 
 ## Step #5 Other Installation
