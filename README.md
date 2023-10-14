@@ -94,74 +94,59 @@ In both instances, as an ubuntu user, install the following:
 
 '''
 sudo apt update
+
 sudo apt install -y software-properties-common 
+
 sudo add-apt-repository -y ppa:deadsnakes/ppa 
+
 sudo apt install -y python3.7 
+
 sudo apt install -y python3.7-venv
+
 '''
 
 ## Step #6 Configure Jenkins Build and Run Build
 
-[Create Jenkins Multibranch Pipeline Build](https://github.com/LamAnnieV/Jenkins/blob/main/Jenkins_Multibranch_Pipeline_Build.md)
-
-Jenkins Build:  In Jenkins create a build "Deployment_4" for the URL Shortener application from GitHub Repository https://github.com/LamAnnieV/deployment_4.git and run the build.  This build consists of four stages:  The Build, the Test, the Clean, and the Deploy stages.
-
-
-
-## Step #7 Configure Jenkins Build and Run Build
+**"deploy_5" Build**
 
 [Create Jenkins Multibranch Pipeline Build](https://github.com/LamAnnieV/Jenkins/blob/main/Jenkins_Multibranch_Pipeline_Build.md)
 
-Jenkins Build:  In Jenkins create a build "Deployment_4" for the URL Shortener application from GitHub Repository https://github.com/LamAnnieV/deployment_4.git and run the build.  This build consists of four stages:  The Build, the Test, the Clean, and the Deploy stages.
+Jenkins Build:  In Jenkins create a build "deploy_5" for the Banking application from GitHub Repository [https://github.com/LamAnnieV/deployment_4.git](https://github.com/LamAnnieV/deploy_5.git) and run the build.  This build consists of four stages:  The Build, the Test, the Clean, and the Deploy stages.
 
-### Results
-**The build was successful, see build run #1 - 3**
+Please refer back to "Edit to the Jenkinsfilev1" and "Edit to the setup.sh" above for changes.
 
-![Jenkins Successful Build: See Run #1](Images/Jenkins_Success.png)
+**Result**
 
-**CloudWatch Monitoring for Build #1**
+Jenkins build "deploy_5" was successful:
 
-![CloudWatch Monitoring #1](Images/CloudWatch_1.png)
+![image](Images/Jenkins_deploy_5.png)
 
-#### CloudWatch Monitoring for Build #2 and 3 that was run back to back
+![image](Images/launch_application.png)
 
-**Build #2 Resource Usage**
+**"deploy_5" Build**
 
-![CloudWatch Monitoring #2](Images/CloudWatch_2.png)
+Jenkins build "deploy_5" was successful:
 
-**Build #3 Resource Usage at the beginning of the build**
+Please refer back to "Edit to the Jenkinsfilev2" and "Edit to the setup2.sh" above for changes.
 
-![CloudWatch Monitoring #3 Start](Images/CloudWatch_3_Start.png)
+**Result**
 
-**Build #3 Resource Usage towards the end of the build**
+Jenkins build "deploy_5.1" took multiple attempts before the build was successful:
 
-![CloudWatch Monitoring #3 End](Images/CloudWatch_3_End.png)
+![image](Images/Jenkins_deploy_5.1.png)
 
-**CloudWatch Notification that Resource Usage is over 15%**
+![image](Images/launch_application_2.png)
 
-![CloudWatch Notification](Images/CloudWatch_Notification_Build2and3.png)
+**Issue(s)**
 
-**Launch URL Shortener Website**
 
-![URL Shortener](Images/URL_Shortener.png)
+## Conclusion
 
-### Conclusion
 
-AWS offers various instance types with different resource capacities. If we base our instance type selection solely on running one build at a time, our current choice, the T2 Medium, seems a bit excessive, as we utilize only about 21% of the CPU capacity.
-
-However, when we consider running builds consecutively, the CPU usage increases to 40%. If we were to use the T2 Micro instance type, which has one CPU, instead of the T2 Medium with two CPUs, our usage percentage would double to 80%. Operating at 80% capacity could potentially hinder performance or even lead to system crashes.
-
-**AWS Instance Type Capacity**
-
-![Instance Type](Images/instance_type.png)
-
-## Issue(s): 
-
-- Our initial build did not trigger an email notification, despite the CPU usage exceeding the set threshold of 15%. This issue may be related to the CloudWatch configuration, which typically takes a couple of minutes to become active after setup completion. In the future, we will conduct notification tests before relying on them in production.  
   
 ## Area(s) for Optimization:
 
--  Automate the AWS Cloud Infrastructure using Terraform
+-  Automate the AWS Cloud Infrastructure using Terraform modules
 
 Note:  ChatGPT was used to enhance the quality and clarity of this documentation
   
