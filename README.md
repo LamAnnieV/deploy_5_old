@@ -46,14 +46,16 @@ Automate the building of the application infrastructure, use an instance that ha
 
 For this deployment, we want:  
 
-```1 VPC
+```
+1 VPC
 2 Availability Zones
 2 Public Subnets
 2 EC2 Instances
 1 Route Table
 2 Security Group 
   -one with ports: 22 and 8000
-  -another with ports: 22 and 8080```
+  -another with ports: 22 and 8080
+```
 
 
 
