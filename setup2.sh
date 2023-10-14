@@ -1,8 +1,8 @@
 #!/bin/bash
-rm -rf deploy_5
+rm -rf c4_deployment-5
 source test/bin/activate
-git clone https://github.com/LamAnnieV/deploy_5.git
-cd deploy_5
+git clone https://github.com/kura-labs-org/c4_deployment-5.git
+cd c4_deployment-5
 pip install -r requirements.txt
 pip install gunicorn
 python database.py
